@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "./App.css";
-
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal)
 function App() {
   const [balance, setBalance] = useState(10000);
   const [withdrawAmount, setWithdrawAmount] = useState(0);
@@ -8,7 +10,10 @@ function App() {
 
   const handleWithdraw = (amount) => {
     if (balance - amount < 1) {
-      alert("ไม่สามารถถอนเงินเกินจำนวนที่มีอยู่ในบัญชีได้");
+      MySwal.fire({
+        title: "ถอนเงินไม่สำเร็จ",
+        icon: "error"
+      });
     } else {
       setBalance((prevBalance) => prevBalance - amount);
       setHistory([...history, { amount, remaining: balance - amount }]);
@@ -18,7 +23,10 @@ function App() {
   const handleCustomWithdraw = () => {
     const amount = parseInt(withdrawAmount);
     if (isNaN(amount) || amount <= 0) {
-      alert("กรุณากรอกจำนวนเงินที่ถูกต้อง");
+      MySwal.fire({
+        title: "กรุณากรอกจำนวนเงินให้ถูกต้อง",
+        icon: "info"
+      });
       return;
     }
     handleWithdraw(amount);
